@@ -8,6 +8,7 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+// Better auth configs
 model User {
   id            String    @id
   name          String
@@ -18,6 +19,8 @@ model User {
   updatedAt     DateTime  @default(now()) @updatedAt
   sessions      Session[]
   accounts      Account[]
+
+  links Link[]
 
   @@unique([email])
   @@map("user")
@@ -66,4 +69,34 @@ model Verification {
   updatedAt  DateTime @default(now()) @updatedAt
 
   @@map("verification")
+}
+
+// Link configs
+model Link {
+  id          String   @id @default(cuid())
+  originalUrl String
+  shortCode   String   @unique
+  customAlias String?
+  clicks      Int      @default(0)
+  userId      String
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  user User @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  analytics Analytics[]
+
+  @@map("links")
+}
+
+model Analytics {
+  id        String   @id @default(cuid())
+  linkId    String
+  userAgent String?
+  timestamp DateTime @default(now())
+  ipAddress String?
+
+  link Link @relation(fields: [linkId], references: [id], onDelete: Cascade)
+
+  @@map("analytics")
 }
