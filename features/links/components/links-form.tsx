@@ -29,12 +29,26 @@ import { baseUrl } from "@/features/constants/path-constants";
 import { LoaderSpinner } from "@/components/loader-spinner";
 import { useRouter } from "next/navigation";
 
-const LinksForm = () => {
+type LinksFormProps = {
+  mode?: "create" | "edit";
+  existingLink?: {
+    id: string;
+    originalUrl: string;
+    customAlias: string | null;
+  };
+  onSuccess?: () => void;
+};
+
+const LinksForm = ({
+  mode = "create",
+  existingLink,
+  onSuccess,
+}: LinksFormProps) => {
   const form = useForm<LinkFormSchemaType>({
     resolver: zodResolver(linkFormSchema),
     defaultValues: {
-      url: "",
-      customAlias: "",
+      url: existingLink?.originalUrl || "",
+      customAlias: existingLink?.customAlias || "",
     },
   });
 
@@ -44,8 +58,12 @@ const LinksForm = () => {
   const onSubmit = (values: LinkFormSchemaType) => {
     startTransition(async () => {
       try {
-        const response = await fetch("/api/links", {
-          method: "POST",
+        const endpoint =
+          mode === "edit" ? `/api/links/${existingLink?.id}` : "/api/links";
+        const method = mode === "edit" ? "PATCH" : "POST";
+
+        const response = await fetch(endpoint, {
+          method,
           headers: {
             "Content-Type": "application/json",
           },
@@ -58,30 +76,36 @@ const LinksForm = () => {
         const data = await response.json();
 
         if (!response.ok) {
-          toast.error(data.error);
+          toast.error(data.error || "Something went wrong");
         } else {
           form.reset();
           router.refresh();
-          toast.success("Link created successfully");
+          toast.success(
+            mode === "edit"
+              ? "Link updated successfully"
+              : "Link created successfully",
+          );
+          onSuccess?.();
         }
       } catch {
-        console.log("Error creating link");
+        toast.error("Network error");
       }
     });
   };
 
   return (
     <Card>
-      <CardHeader>
-        <CardTitle>Create Short Link</CardTitle>
-        <CardDescription>
-          Shorten your long URLs and make them easier to share
-        </CardDescription>
-      </CardHeader>
+      {mode === "create" && (
+        <CardHeader>
+          <CardTitle>Create Short Link</CardTitle>
+          <CardDescription>
+            Shorten your long URLs and make them easier to share
+          </CardDescription>
+        </CardHeader>
+      )}
       <CardContent>
         <Form {...form}>
           <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-6">
-            {/* URL Field */}
             <FormField
               control={form.control}
               name="url"
@@ -100,7 +124,6 @@ const LinksForm = () => {
               )}
             />
 
-            {/* Custom Alias Field */}
             <FormField
               control={form.control}
               name="customAlias"
@@ -125,12 +148,13 @@ const LinksForm = () => {
               )}
             />
 
-            {/* Submit Button */}
             <Button type="submit" className="w-full" disabled={pending}>
               {pending ? (
-                <>
-                  <LoaderSpinner label={"Creating..."} />
-                </>
+                <LoaderSpinner
+                  label={mode === "edit" ? "Updating..." : "Creating..."}
+                />
+              ) : mode === "edit" ? (
+                "Update Link"
               ) : (
                 "Create Short Link"
               )}

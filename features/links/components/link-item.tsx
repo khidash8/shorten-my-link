@@ -3,28 +3,22 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CheckIcon, CopyIcon } from "lucide-react";
+import { CheckIcon, CopyIcon, PencilIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { DeleteLinkDialogue } from "@/features/links/components/delete-link-dialogue";
+import { EditLinkDialog } from "@/features/links/components/editLink-dialog";
+import { ShortLink } from "@/features/links/types/link-types";
 
 type LinkItemProps = {
-  link: {
-    id: string;
-    originalUrl: string;
-    shortCode: string;
-    customAlias: string | null;
-    clicks: number;
-    userId: string;
-    createdAt: Date;
-    updatedAt: Date;
-  };
+  link: ShortLink;
   onCopyAction?: (shortCode: string) => void;
 };
 
 export function LinkItem({ link, onCopyAction }: LinkItemProps) {
   const shortUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/go/${link.shortCode}`;
   const [copied, setCopied] = useState(false);
+  const [isEditOpen, setIsEditOpen] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shortUrl);
@@ -54,7 +48,7 @@ export function LinkItem({ link, onCopyAction }: LinkItemProps) {
           <span className="text-muted-foreground text-xs">
             Created: {new Date(link.createdAt).toLocaleDateString("en-US")}
           </span>
-          <div className="flex items-center">
+          <div className="flex items-center space-x-1">
             <Button
               variant="ghost"
               size="icon"
@@ -63,10 +57,27 @@ export function LinkItem({ link, onCopyAction }: LinkItemProps) {
             >
               {copied ? <CheckIcon /> : <CopyIcon />}
             </Button>
+
+            {/* Edit link */}
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer rounded-xl"
+              onClick={() => setIsEditOpen(true)}
+            >
+              <PencilIcon />
+            </Button>
+
             <DeleteLinkDialogue id={link.id} />
           </div>
         </div>
       </div>
+
+      <EditLinkDialog
+        open={isEditOpen}
+        onOpenChange={setIsEditOpen}
+        link={link}
+      />
     </li>
   );
 }
