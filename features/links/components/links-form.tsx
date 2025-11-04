@@ -1,6 +1,6 @@
 "use client";
 
-import React from "react";
+import React, { useTransition } from "react";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
 import {
@@ -25,6 +25,8 @@ import {
   LinkFormSchemaType,
 } from "@/features/links/schemas/link-form-schema";
 import { toast } from "sonner";
+import { baseUrl } from "@/features/constants/path-constants";
+import { LoaderSpinner } from "@/components/loader-spinner";
 
 const LinksForm = () => {
   const form = useForm<LinkFormSchemaType>({
@@ -35,33 +37,34 @@ const LinksForm = () => {
     },
   });
 
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
+  const [pending, startTransition] = useTransition();
 
-  const onSubmit = async (values: LinkFormSchemaType) => {
-    console.log(values);
+  const onSubmit = (values: LinkFormSchemaType) => {
+    startTransition(async () => {
+      try {
+        const response = await fetch("/api/links", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            url: values.url,
+            customAlias: values.customAlias || undefined,
+          }),
+        });
 
-    try {
-      const response = await fetch("/api/links", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          url: values.url,
-          customAlias: values.customAlias || undefined,
-        }),
-      });
+        const data = await response.json();
 
-      const data = await response.json();
-
-      if (!response.ok) {
-        toast.error(data.error);
-      } else {
-        toast.success("Link created successfully");
+        if (!response.ok) {
+          toast.error(data.error);
+        } else {
+          form.reset();
+          toast.success("Link created successfully");
+        }
+      } catch {
+        console.log("Error creating link");
       }
-    } catch {
-      console.log("Error creating link");
-    }
+    });
   };
 
   return (
@@ -84,8 +87,9 @@ const LinksForm = () => {
                   <FormLabel>Destination URL</FormLabel>
                   <FormControl>
                     <Input
-                      placeholder="https://example.com/very-long-url-path"
+                      placeholder="https://example.com/your-url-path"
                       {...field}
+                      disabled={pending}
                     />
                   </FormControl>
                   <FormMessage />
@@ -108,6 +112,7 @@ const LinksForm = () => {
                       <Input
                         placeholder="my-custom-link"
                         {...field}
+                        disabled={pending}
                         className="flex-1"
                       />
                     </div>
@@ -118,8 +123,14 @@ const LinksForm = () => {
             />
 
             {/* Submit Button */}
-            <Button type="submit" className="w-full">
-              Create Short Link
+            <Button type="submit" className="w-full" disabled={pending}>
+              {pending ? (
+                <>
+                  <LoaderSpinner label={"Creating..."} />
+                </>
+              ) : (
+                "Create Short Link"
+              )}
             </Button>
           </form>
         </Form>
