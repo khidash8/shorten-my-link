@@ -6,6 +6,7 @@ import { CheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
 import { ShortLink } from "@/features/links/types/link-types";
+import { dateOptions } from "@/lib/intl-converter";
 
 type PublicLinkItemProps = {
   link: ShortLink;
@@ -50,7 +51,8 @@ export function PublicLinkItem({ link, onCopyAction }: PublicLinkItemProps) {
 
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground text-xs">
-            Created: {new Date(link.createdAt).toLocaleDateString("en-US")}
+            Created:{" "}
+            {new Date(link.createdAt).toLocaleString("en-IN", dateOptions)}
           </span>
         </div>
       </div>

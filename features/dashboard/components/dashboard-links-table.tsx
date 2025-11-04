@@ -16,6 +16,7 @@ import { EditLinkDialog } from "@/features/links/components/editLink-dialog";
 import { AddLinkDialog } from "@/features/links/components/editLink-dialog";
 import { ShortLink } from "@/features/links/types/link-types";
 import { DeleteLinkDialogue } from "@/features/links/components/delete-link-dialogue";
+import { dateOptions } from "@/lib/intl-converter";
 
 type DashboardLinksTableProps = {
   links: ShortLink[];
@@ -76,7 +77,10 @@ export function DashboardLinksTable({ links }: DashboardLinksTableProps) {
                   </TableCell>
                   <TableCell>{link.clicks}</TableCell>
                   <TableCell>
-                    {new Date(link.createdAt).toLocaleDateString()}
+                    {new Date(link.createdAt).toLocaleString(
+                      "en-IN",
+                      dateOptions,
+                    )}
                   </TableCell>
                   <TableCell>
                     <Button

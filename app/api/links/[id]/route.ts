@@ -9,7 +9,6 @@ export async function DELETE(
   try {
     const session = await auth.api.getSession({ headers: req.headers });
 
-    console.log(session);
     if (!session) {
       return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
     }

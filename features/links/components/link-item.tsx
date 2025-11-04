@@ -9,6 +9,7 @@ import { toast } from "sonner";
 import { DeleteLinkDialogue } from "@/features/links/components/delete-link-dialogue";
 import { EditLinkDialog } from "@/features/links/components/editLink-dialog";
 import { ShortLink } from "@/features/links/types/link-types";
+import { dateOptions } from "@/lib/intl-converter";
 
 type LinkItemProps = {
   link: ShortLink;
@@ -46,7 +47,8 @@ export function LinkItem({ link, onCopyAction }: LinkItemProps) {
 
         <div className="flex items-center justify-between">
           <span className="text-muted-foreground text-xs">
-            Created: {new Date(link.createdAt).toLocaleDateString("en-US")}
+            Created:{" "}
+            {new Date(link.createdAt).toLocaleString("en-IN", dateOptions)}
           </span>
           <div className="flex items-center space-x-1">
             <Button
