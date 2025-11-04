@@ -3,7 +3,9 @@
 import Link from "next/link";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { CopyIcon } from "lucide-react";
+import { CheckIcon, CopyIcon } from "lucide-react";
+import { useState } from "react";
+import { toast } from "sonner";
 
 type LinkItemProps = {
   link: {
@@ -21,10 +23,16 @@ type LinkItemProps = {
 
 export function LinkItem({ link, onCopyAction }: LinkItemProps) {
   const shortUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/go/${link.shortCode}`;
+  const [copied, setCopied] = useState(false);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(shortUrl);
     onCopyAction?.(link.shortCode);
+    setCopied(true);
+    toast.success("Link copied to clipboard");
+    setTimeout(() => {
+      setCopied(false);
+    }, 3000);
   };
 
   return (
@@ -42,7 +50,7 @@ export function LinkItem({ link, onCopyAction }: LinkItemProps) {
         </div>
         <div className="flex items-center justify-between gap-2">
           <span className="text-muted-foreground text-xs">
-            Created: {new Date(link.createdAt).toLocaleDateString()}
+            Created: {new Date(link.createdAt).toLocaleDateString("en-US")}
           </span>
           <Button
             variant="ghost"
@@ -50,7 +58,7 @@ export function LinkItem({ link, onCopyAction }: LinkItemProps) {
             className="cursor-pointer rounded-xl"
             onClick={handleCopy}
           >
-            <CopyIcon />
+            {copied ? <CheckIcon /> : <CopyIcon />}
           </Button>
         </div>
       </div>

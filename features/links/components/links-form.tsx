@@ -27,6 +27,7 @@ import {
 import { toast } from "sonner";
 import { baseUrl } from "@/features/constants/path-constants";
 import { LoaderSpinner } from "@/components/loader-spinner";
+import { useRouter } from "next/navigation";
 
 const LinksForm = () => {
   const form = useForm<LinkFormSchemaType>({
@@ -38,6 +39,7 @@ const LinksForm = () => {
   });
 
   const [pending, startTransition] = useTransition();
+  const router = useRouter();
 
   const onSubmit = (values: LinkFormSchemaType) => {
     startTransition(async () => {
@@ -59,6 +61,7 @@ const LinksForm = () => {
           toast.error(data.error);
         } else {
           form.reset();
+          router.refresh();
           toast.success("Link created successfully");
         }
       } catch {

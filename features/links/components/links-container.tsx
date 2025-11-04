@@ -1,10 +1,6 @@
 import React, { Suspense } from "react";
-import Link from "next/link";
 import { LoaderSpinner } from "@/components/loader-spinner";
 import { getUserLinks } from "@/features/links/actions/get-user-links-action";
-import { Badge } from "@/components/ui/badge";
-import { Button } from "@/components/ui/button";
-import { CopyIcon } from "lucide-react";
 import { LinkItem } from "@/features/links/components/link-item";
 
 const LinksContainer = () => {
