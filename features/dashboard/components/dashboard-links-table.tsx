@@ -15,6 +15,7 @@ import { PlusCircle, PencilIcon } from "lucide-react";
 import { EditLinkDialog } from "@/features/links/components/editLink-dialog";
 import { AddLinkDialog } from "@/features/links/components/editLink-dialog";
 import { ShortLink } from "@/features/links/types/link-types";
+import { DeleteLinkDialogue } from "@/features/links/components/delete-link-dialogue";
 
 type DashboardLinksTableProps = {
   links: ShortLink[];
@@ -86,6 +87,8 @@ export function DashboardLinksTable({ links }: DashboardLinksTableProps) {
                     >
                       <PencilIcon size={16} />
                     </Button>
+
+                    <DeleteLinkDialogue id={link.id} />
                   </TableCell>
                 </TableRow>
               ))}
