@@ -1,6 +1,6 @@
 import React from "react";
 import { CardTitle } from "@/components/ui/card";
-import { ArrowLeft, LucideBookOpenText } from "lucide-react";
+import { ArrowLeft } from "lucide-react";
 import Link from "next/link";
 import { buttonVariants } from "@/components/ui/button";
 import {
@@ -16,7 +16,7 @@ export default function LoginLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <div className="bg-background flex min-h-svh flex-col items-center justify-center gap-6 p-6 md:p-10">
+    <div className="bg-background flex min-h-[calc(100vh-4rem)] flex-col items-center justify-center gap-6">
       {/* Back button */}
       <Link
         href={homePath()}
