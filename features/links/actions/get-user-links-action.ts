@@ -4,7 +4,7 @@ import { auth } from "@/lib/auth";
 import { headers } from "next/headers";
 import prisma from "@/lib/db";
 
-export async function getUserLinks() {
+export async function getUserLinks(dashboard: boolean = false) {
   try {
     const headersList = await headers();
     const session = await auth.api.getSession({ headers: headersList });
@@ -16,7 +16,7 @@ export async function getUserLinks() {
     const links = await prisma.link.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
-      take: 50,
+      take: !dashboard ? 5 : undefined,
     });
 
     return { success: true, data: links };
