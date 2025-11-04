@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { CheckIcon, CopyIcon } from "lucide-react";
 import { useState } from "react";
 import { toast } from "sonner";
+import { DeleteLinkDialogue } from "@/features/links/components/delete-link-dialogue";
 
 type LinkItemProps = {
   link: {
@@ -48,18 +49,22 @@ export function LinkItem({ link, onCopyAction }: LinkItemProps) {
           </Link>
           <Badge>{link.clicks} clicks</Badge>
         </div>
-        <div className="flex items-center justify-between gap-2">
+
+        <div className="flex items-center justify-between">
           <span className="text-muted-foreground text-xs">
             Created: {new Date(link.createdAt).toLocaleDateString("en-US")}
           </span>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="cursor-pointer rounded-xl"
-            onClick={handleCopy}
-          >
-            {copied ? <CheckIcon /> : <CopyIcon />}
-          </Button>
+          <div className="flex items-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="cursor-pointer rounded-xl"
+              onClick={handleCopy}
+            >
+              {copied ? <CheckIcon /> : <CopyIcon />}
+            </Button>
+            <DeleteLinkDialogue id={link.id} />
+          </div>
         </div>
       </div>
     </li>

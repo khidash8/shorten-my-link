@@ -16,6 +16,7 @@ export async function getUserLinks() {
     const links = await prisma.link.findMany({
       where: { userId: session.user.id },
       orderBy: { createdAt: "desc" },
+      take: 50,
     });
 
     return { success: true, data: links };
