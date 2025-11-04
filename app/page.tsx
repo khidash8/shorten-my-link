@@ -1,5 +1,7 @@
 import PublicLinksContainer from "@/features/public-path/components/public-links-ontainer";
 
+export const dynamic = "force-dynamic";
+
 const HomePage = () => {
   return (
     <div className="flex flex-col gap-4">
