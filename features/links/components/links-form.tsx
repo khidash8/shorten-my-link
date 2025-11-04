@@ -11,7 +11,6 @@ import {
   FormLabel,
   FormMessage,
 } from "@/components/ui/form";
-import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import {
@@ -25,6 +24,7 @@ import {
   linkFormSchema,
   LinkFormSchemaType,
 } from "@/features/links/schemas/link-form-schema";
+import { toast } from "sonner";
 
 const LinksForm = () => {
   const form = useForm<LinkFormSchemaType>({
@@ -37,11 +37,32 @@ const LinksForm = () => {
 
   const baseUrl = process.env.NEXT_PUBLIC_BASE_URL ?? "http://localhost:3000";
 
-  function onSubmit(values: LinkFormSchemaType) {
-    // Do something with the form values.
-    // ✅ This will be type-safe and validated.
+  const onSubmit = async (values: LinkFormSchemaType) => {
     console.log(values);
-  }
+
+    try {
+      const response = await fetch("/api/links", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          url: values.url,
+          customAlias: values.customAlias || undefined,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        toast.error(data.error);
+      } else {
+        toast.success("Link created successfully");
+      }
+    } catch {
+      console.log("Error creating link");
+    }
+  };
 
   return (
     <Card>
