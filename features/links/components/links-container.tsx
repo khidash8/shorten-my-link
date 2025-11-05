@@ -20,7 +20,7 @@ const LinksContainer = () => {
 export default LinksContainer;
 
 const RenderLinks = async () => {
-  const result = await getUserLinks();
+  const result = await getUserLinks(5);
 
   if (!result.success) {
     return (

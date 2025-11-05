@@ -44,6 +44,7 @@ export function PublicLinkItem({ link, onCopyAction }: PublicLinkItemProps) {
             size="icon"
             className="cursor-pointer rounded-xl"
             onClick={handleCopy}
+            disabled={copied}
           >
             {copied ? <CheckIcon /> : <CopyIcon />}
           </Button>

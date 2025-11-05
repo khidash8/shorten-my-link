@@ -79,7 +79,6 @@ export async function PATCH(
       const aliasExists = await prisma.link.findFirst({
         where: {
           shortCode: customAlias,
-          id: { not: id },
         },
       });
 

@@ -39,7 +39,7 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <NavbarOrigin />
-          <main className={"p-12"}>{children}</main>
+          <main className={"p-8 lg:p-12"}>{children}</main>
           <Toaster />
         </ThemeProvider>
       </body>

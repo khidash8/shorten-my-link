@@ -3,7 +3,7 @@ import { Skeleton } from "@/components/ui/skeleton";
 
 const ItemSkeleton = () => {
   return (
-    <li className="rounded-xl border p-3">
+    <div className="rounded-xl border p-3">
       <div className="flex flex-col gap-2">
         {/* First row: URL and clicks badge */}
         <div className="flex items-center justify-between gap-2">
@@ -17,7 +17,7 @@ const ItemSkeleton = () => {
           <Skeleton className="h-8 w-8 rounded-xl" /> {/* Copy button */}
         </div>
       </div>
-    </li>
+    </div>
   );
 };
 

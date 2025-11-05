@@ -10,6 +10,7 @@ import { DeleteLinkDialogue } from "@/features/links/components/delete-link-dial
 import { EditLinkDialog } from "@/features/links/components/editLink-dialog";
 import { ShortLink } from "@/features/links/types/link-types";
 import { dateOptions } from "@/lib/intl-converter";
+import { baseUrl } from "@/features/constants/path-constants";
 
 type LinkItemProps = {
   link: ShortLink;
@@ -17,7 +18,7 @@ type LinkItemProps = {
 };
 
 export function LinkItem({ link, onCopyAction }: LinkItemProps) {
-  const shortUrl = `${process.env.NEXT_PUBLIC_BASE_URL}/go/${link.shortCode}`;
+  const shortUrl = `${baseUrl}/go/${link.shortCode}`;
   const [copied, setCopied] = useState(false);
   const [isEditOpen, setIsEditOpen] = useState(false);
 

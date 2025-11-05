@@ -17,13 +17,13 @@ import { AddLinkDialog } from "@/features/links/components/editLink-dialog";
 import { ShortLink } from "@/features/links/types/link-types";
 import { DeleteLinkDialogue } from "@/features/links/components/delete-link-dialogue";
 import { dateOptions } from "@/lib/intl-converter";
+import { baseUrl } from "@/features/constants/path-constants";
 
 type DashboardLinksTableProps = {
   links: ShortLink[];
 };
 
 export function DashboardLinksTable({ links }: DashboardLinksTableProps) {
-  const baseUrl = process.env.NEXT_PUBLIC_BASE_URL;
   const [isAddOpen, setIsAddOpen] = useState(false);
   const [editingLink, setEditingLink] = useState<ShortLink | undefined>();
   const [isEditOpen, setIsEditOpen] = useState(false);
