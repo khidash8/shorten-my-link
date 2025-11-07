@@ -1,7 +1,7 @@
 import React, { Suspense } from "react";
 import ItemSkeleton from "@/features/links/components/item-skeleton";
-import { PublicLinkItem } from "@/features/public-path/components/public-link-item";
 import { getPublicLinks } from "@/features/public-path/actions/get-public-links-action";
+import { SearchableLinks } from "@/features/public-path/components/searchable-links";
 
 const PublicLinksContainer = () => {
   return (
@@ -39,13 +39,5 @@ const RenderPublicLinks = async () => {
     return <div className="text-muted-foreground">No links available yet.</div>;
   }
 
-  return (
-    <ul className="space-y-4">
-      <div className={"grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-3"}>
-        {links.map((link) => (
-          <PublicLinkItem key={link.id} link={link} />
-        ))}
-      </div>
-    </ul>
-  );
+  return <SearchableLinks initialLinks={links} />;
 };
