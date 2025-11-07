@@ -21,8 +21,8 @@ export function SearchableLinks({ initialLinks }: SearchableLinksProps) {
 
   useEffect(() => {
     startTransition(async () => {
-      // const result = await getPublicLinks(20, debouncedQuery);
-      const result = await getPublicLinks(20);
+      const result = await getPublicLinks(20, debouncedQuery);
+      // const result = await getPublicLinks(20);
       if (result.success && result.data) {
         setLinks(result.data);
       }
