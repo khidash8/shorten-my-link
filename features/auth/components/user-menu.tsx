@@ -1,4 +1,4 @@
-import { BoltIcon, ChevronDownIcon, House } from "lucide-react";
+import { BoltIcon, ChevronDownIcon, House, UserIcon } from "lucide-react";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Button } from "@/components/ui/button";
 import {
@@ -11,7 +11,11 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import SignOutButton from "@/features/auth/components/sign-out-button";
-import { dashboardPath, homePath } from "@/features/constants/path-constants";
+import {
+  dashboardPath,
+  homePath,
+  userPath,
+} from "@/features/constants/path-constants";
 import { cloneElement, ReactElement, useMemo } from "react";
 import Link from "next/link";
 import { AuthSession } from "@/features/auth/auth-types";
@@ -38,6 +42,11 @@ export default function UserMenu({ session }: iAPeProps) {
         href: dashboardPath(),
         label: "Dashboard",
         icon: <BoltIcon />,
+      },
+      {
+        href: userPath(),
+        label: "My Links",
+        icon: <UserIcon />,
       },
     ];
   }, []);
